@@ -1,0 +1,62 @@
+-- W4_GP_OuterJoins2_Archer.sql
+
+-- (14-8) Question 1: Show the number of lunches each employee will attend.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, 
+       COUNT(l.LUNCH_ID) AS NUM_LUNCHES
+FROM L_EMPLOYEES e 
+LEFT OUTER JOIN L_LUNCHES l ON e.EMPLOYEE_ID = l.EMPLOYEE_ID
+GROUP BY e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME
+ORDER BY e.EMPLOYEE_ID;
+
+-- (14-9) Question 2: Create an outer join of the L_EMPLOYEES table and L_LUNCHES table.
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, 
+       l.LUNCH_ID, l.LUNCH_DATE
+FROM L_EMPLOYEES e 
+FULL OUTER JOIN L_LUNCHES l ON e.EMPLOYEE_ID = l.EMPLOYEE_ID
+ORDER BY e.EMPLOYEE_ID, l.LUNCH_DATE;
+
+-- (14-9) Question 3: Show the number of lunches each employee will attend (using sec1409 table).
+CREATE TABLE SEC1409 AS 
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME
+FROM L_EMPLOYEES e;
+
+SELECT e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME, 
+       COUNT(l.LUNCH_ID) AS NUM_LUNCHES
+FROM SEC1409 e 
+LEFT OUTER JOIN L_LUNCHES l ON e.EMPLOYEE_ID = l.EMPLOYEE_ID
+GROUP BY e.EMPLOYEE_ID, e.FIRST_NAME, e.LAST_NAME
+ORDER BY e.EMPLOYEE_ID;
+
+-- (14-10) Question 4: Create a full outer join of TWOS and THREES tables with sorting.
+SELECT * 
+FROM TWOS FULL OUTER JOIN THREES 
+ON TWOS.NUMBER_2 = THREES.NUMBER_3 
+ORDER BY TWOS.NUMBER_2 NULLS FIRST;
+
+-- (14-11) Question 5: Find all missing and repeated numbers in SEC1411_NUMBERS.
+SELECT N, COUNT(*) AS OCCURRENCES 
+FROM SEC1411_NUMBERS 
+GROUP BY N 
+ORDER BY N;
+
+-- (14-12) Question 6: Find rows in SEC1412A that do not exist in SEC1412B.
+SELECT * 
+FROM SEC1412A 
+WHERE NOT EXISTS (
+    SELECT 1 FROM SEC1412B 
+    WHERE SEC1412A.COLUMN1 = SEC1412B.COLUMN1
+);
+
+-- (14-13) Question 7: Perform two full outer joins on SEC1413_FRUITS and SEC1413_COLORS.
+-- First join condition: f_num = c_num
+SELECT * 
+FROM SEC1413_FRUITS f 
+FULL OUTER JOIN SEC1413_COLORS c 
+ON f.F_NUM = c.C_NUM;
+
+-- Second join condition: fruit = color
+SELECT * 
+FROM SEC1413_FRUITS f 
+FULL OUTER JOIN SEC1413_COLORS c 
+ON f.FRUIT = c.COLOR;
+
